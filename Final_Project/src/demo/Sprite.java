@@ -29,6 +29,7 @@ public class Sprite {
 
 	public void setX(int x) {
 		this.x = x;
+		this.r.x = x;
 	}
 
 	public int getY() {
@@ -37,6 +38,7 @@ public class Sprite {
 
 	public void setY(int y) {
 		this.y = y;
+		this.r.y=y;
 	}
 
 	public int getHeight() {

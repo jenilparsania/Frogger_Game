@@ -2,6 +2,8 @@ package demo;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -10,8 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class GamePrep  extends JFrame implements KeyListener{
+public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	//declare copies of our character
+	private Frog frog;
+	private Car car;
+	private Log log;
 	
 	
 	// GUI variables
@@ -20,10 +25,10 @@ public class GamePrep  extends JFrame implements KeyListener{
 	private ImageIcon backgroundImage ; 
 	private JLabel frogLabel;
 	private ImageIcon frogImage;
-	
-	private Frog frog;
-	
-	
+	private JLabel carLabel;
+	private ImageIcon carImage;
+	private JLabel logLabel;
+	private ImageIcon logImage;
 	
 	
 	// buttons
@@ -33,7 +38,10 @@ public class GamePrep  extends JFrame implements KeyListener{
 	public GamePrep() {
 		super("Frogger");
 		//set up screen
-		frog = new Frog(GameProperties.x_left,GameProperties.y_left,120,200,"frog1-copy.png");
+		// public Sprite(int x,int y, int height, int width,String image) 
+		frog = new Frog(GameProperties.x_left,GameProperties.y_left,39,40,"frog1-copy.png");
+		car = new Car(7,491,40,80,"car-3.png");
+		log = new Log(7,139,120,250,"log-big.png");
 		
 		
 		setSize(GameProperties.SCREEN_WIDTH,GameProperties.SCREEN_HEIGHT);
@@ -57,8 +65,8 @@ public class GamePrep  extends JFrame implements KeyListener{
 		// frog setup
 		frog.setX(GameProperties.x_left);
 		frog.setY(GameProperties.y_left);
-		frog.setWidth(100);
-		frog.setHeight(200);
+		frog.setWidth(40);
+		frog.setHeight(39);
 		frog.setImage("frog1-copy.png");
 		
 		frogLabel = new JLabel();
@@ -69,16 +77,58 @@ public class GamePrep  extends JFrame implements KeyListener{
 		frogLabel.setLocation(frog.getX(),frog.getY());
 		frog.display();
 		
+		car.setX(7);
+		car.setY(491 );
+		car.setWidth(100);
+		car.setHeight(40);
+		car.setImage("car-3.png");
+		car.setFrog(frog ); // I was missing this part
+		
+		carLabel = new JLabel();
+		carImage = new ImageIcon(getClass().getResource("images/"+car.getImage()));
+		carLabel.setIcon(carImage);
+		
+		carLabel.setSize(car.getWidth(),car.getHeight());
+		carLabel.setLocation(car.getX(),car.getY());
+		car.display();
+		
+		// carLabel has a memory label
+		car.setCarLabel(carLabel);
+		car.setFrogLabel(frogLabel);
+		
+		// log = new Log(7,160,120,250,"log-delete.png");
+		log.setX(7);
+		log.setY(139 );
+		log.setWidth(120);
+		log.setHeight(250);
+		log.setImage("log-big.png");
+		
+		logLabel = new JLabel();
+		logImage = new ImageIcon(getClass().getResource("images/"+log.getImage()));
+		logLabel.setIcon(logImage);
+		
+		logLabel.setSize(log.getWidth(),log.getHeight());
+		logLabel.setLocation(log.getX(),log.getY());
+		log.display();		
+		
+		startButton = new JButton("Start");
+		startButton.setSize(75, 50);
+		startButton.setLocation(
+				GameProperties.SCREEN_WIDTH - 100, 
+				GameProperties.SCREEN_HEIGHT - 100);
+		startButton.setFocusable(false);
+		startButton.addActionListener(this);
+		car.setStartButton(startButton);
 		
 		
 		
-		//buttons
-//		startButton = new JButton("Start");
-		
-		
+
 		// would have to declare the characters from up
 		content.addKeyListener(this);
+		add(startButton);
 		add(frogLabel);
+		add(carLabel);
+		add(logLabel);
 		add(backgroundImageLabel);
 		content.setFocusable(true);
 		
@@ -95,13 +145,13 @@ public class GamePrep  extends JFrame implements KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+	
 		// get the current position of frog
 		int x = frog.getX();
 		int y = frog.getY();
@@ -122,9 +172,7 @@ public class GamePrep  extends JFrame implements KeyListener{
 		}else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
 			y+=GameProperties.CHARACTER_STEP;
 			
-//			if(y>= GameProperties.SCREEN_HEIGHT) {
-//				y=-1*frog.getHeight();
-//			}
+
 			if(y>=GameProperties.y_low) {
 				y = GameProperties.y_low;
 			}
@@ -154,13 +202,29 @@ public class GamePrep  extends JFrame implements KeyListener{
 		frogLabel.setLocation(frog.getX(),frog.getY());
 		
 		System.out.println("X: "+x + " Y: "+y);
+		System.out.println("frog X : "+this.frog.getRectangle().x+",  frog y : "+ this.frog.getRectangle().y+ " , frog w : "+this.frog.getRectangle().width+ " ,frog h : " +this.frog.getRectangle().height);
 		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==startButton) {
+			
+			System.out.println("Start button pressed");
+			
+			if(car.getMoving()) { // just to check
+				car.stopThread();
+			}else {
+				car.startThread();
+			}
+		}
 		
 	}
 	

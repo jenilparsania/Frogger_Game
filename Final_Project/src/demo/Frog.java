@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 
 public class Frog extends Sprite {
 	
-	private Boolean hasPassedCars;
+//	private Boolean hasPassedCars;
 	private Boolean hasReachedLogs;
 	private JLabel frogLabel;
 	

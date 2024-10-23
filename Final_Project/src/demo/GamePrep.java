@@ -41,7 +41,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		// public Sprite(int x,int y, int height, int width,String image) 
 		frog = new Frog(GameProperties.x_left,GameProperties.y_left,39,40,"frog1-copy.png");
 		car = new Car(7,491,40,80,"car-3.png");
-		log = new Log(7,139,120,250,"log-big.png");
+		log = new Log(7,239,40,110,"log-big.png");
 		
 		
 		setSize(GameProperties.SCREEN_WIDTH,GameProperties.SCREEN_HEIGHT);
@@ -83,6 +83,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		car.setHeight(40);
 		car.setImage("car-3.png");
 		car.setFrog(frog ); // I was missing this part
+		car.setLog(log);
 		
 		carLabel = new JLabel();
 		carImage = new ImageIcon(getClass().getResource("images/"+car.getImage()));
@@ -95,13 +96,17 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		// carLabel has a memory label
 		car.setCarLabel(carLabel);
 		car.setFrogLabel(frogLabel);
+		car.setLogLabel(logLabel);
 		
 		// log = new Log(7,160,120,250,"log-delete.png");
 		log.setX(7);
-		log.setY(139 );
-		log.setWidth(120);
-		log.setHeight(250);
+		log.setY(239 );
+		log.setWidth(110);
+		log.setHeight(40);
 		log.setImage("log-big.png");
+		log.setFrog(frog);
+		log.setCar(car);
+		
 		
 		logLabel = new JLabel();
 		logImage = new ImageIcon(getClass().getResource("images/"+log.getImage()));
@@ -110,6 +115,9 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		logLabel.setSize(log.getWidth(),log.getHeight());
 		logLabel.setLocation(log.getX(),log.getY());
 		log.display();		
+		log.setLogLabel(logLabel);
+		log.setFrogLabel(frogLabel);
+		log.setCarLabel(carLabel);
 		
 		startButton = new JButton("Start");
 		startButton.setSize(75, 50);
@@ -221,8 +229,10 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			
 			if(car.getMoving()) { // just to check
 				car.stopThread();
+				log.stopThread();
 			}else {
 				car.startThread();
+				log.startThread();
 			}
 		}
 		

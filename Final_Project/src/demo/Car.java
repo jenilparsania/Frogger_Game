@@ -13,7 +13,9 @@ public class Car extends Sprite implements Runnable {
 	private JLabel carLabel;
 	
 	private Frog frog;
+	private Log log;
 	private JLabel frogLabel;
+	private JLabel logLabel;
 	
 	private JButton startButton;
 	
@@ -28,6 +30,14 @@ public class Car extends Sprite implements Runnable {
 	
 	public void setFrogLabel(JLabel temp) {
 		frogLabel = temp;
+	}
+	
+	public void setLog(Log temp) {
+		log = temp;
+	}
+	
+	public void setLogLabel(JLabel temp) {
+		logLabel = temp;
 	}
 	
 	public void setCarLabel(JLabel temp) {
@@ -56,7 +66,7 @@ public class Car extends Sprite implements Runnable {
 	
 	public void startThread() {
 		// run will be triggered 
-		System.out.println("Current moving : "+ this.moving);
+		System.out.println("Current moving cars : "+ this.moving);
 		
 		
 		if(!this.moving) {
@@ -82,6 +92,7 @@ public class Car extends Sprite implements Runnable {
 	public void stopThread() {
 		if(this.moving) {
 			this.moving = false;
+			log.setMoving(false);
 			startButton.setText("collided");
 		}
 	}
@@ -121,6 +132,7 @@ public class Car extends Sprite implements Runnable {
 		if(this.r.intersects(frog.getRectangle())) {
 			System.out.println("BOOM!");
 			this.stopThread();
+			
 		}
 	}
 

@@ -64,6 +64,11 @@ public class Car extends Sprite implements Runnable {
 		
 	}
 	
+	private GamePrep gamePrep;
+	public void setGamePrep(GamePrep gamePrep) {
+		this.gamePrep = gamePrep;
+	}
+	
 	public void startThread() {
 		// run will be triggered 
 		System.out.println("Current moving cars : "+ this.moving);
@@ -71,7 +76,7 @@ public class Car extends Sprite implements Runnable {
 		
 		if(!this.moving) {
 			this.moving = true;
-			startButton.setText("yah started");
+			startButton.setText("Started");
 			this.setImage("car-3.png");
 			
 			carLabel.setIcon(new ImageIcon(getClass().getResource("images/"+ this.getImage())));
@@ -132,6 +137,7 @@ public class Car extends Sprite implements Runnable {
 		if(this.r.intersects(frog.getRectangle())) {
 			System.out.println("BOOM!");
 			this.stopThread();
+			gamePrep.stopAllCars();
 			
 		}
 	}

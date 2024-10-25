@@ -9,14 +9,22 @@ public class GameProperties {
 	public static final int y_left = 533;
 	public static final int x_right = 763;
 	public static final int y_low = 533;
-	public static final int y_top = -55;
+	public static final int y_top = 29;
+	public static final int y_safe = 245;
+	
 	
 	// as we changed the rectangle even the dimensions changed as well 
 	
 	
 	
 	/*
-	 * Collision detech : not working 
-	 * work on that , showing always colliding 
+	 * safe zone : y=281
+	 * one step after safe-zone:  y = 239 
 	 * */
+	
+	/*
+	 * error in the array of cars , if one car detech collison then it stops only one car
+	 * 
+	 * 
+	 */
 }

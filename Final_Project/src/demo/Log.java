@@ -127,10 +127,26 @@ public class Log  extends Sprite implements Runnable{
 	
 	
 	private void detechCollision() {
-		if(this.r.intersects(frog.getRectangle())) {
-			System.out.println("BOOM!");
-			this.stopThread();
+		
+		if(frog.getY() <= GameProperties.y_safe) {
+			if(this.r.intersects(frog.getRectangle())) {
+				//while(this.r.intersects(frog.getRectangle())) {
+				//was using a while loop but then realized that detechCollision
+				// was itself in a while loop 
+					int frogx= frog.getX();
+					frogx += GameProperties.CHARACTER_STEP;
+					frog.setX(frogx);
+					frogLabel.setLocation(frog.getX(),frog.getY());
+					
+					
+					
+				
+			}else {
+				this.stopThread();
+			}
 		}
+		// } 
+		
 	
 	}
 

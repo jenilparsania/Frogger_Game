@@ -10,8 +10,11 @@ public class Log  extends Sprite implements Runnable{
 	private Boolean hasPassedCars;
 	private JButton startButton;
 	private Car car;
+	private Car cars[];
+	private Car cars1[];
+	private Car cars2[];
 	private JLabel carLabel;
-	
+	private JLabel[] carLabels;
 	private JLabel logLabel;
 	
 	private Frog frog;
@@ -42,12 +45,28 @@ public class Log  extends Sprite implements Runnable{
 		this.moving = moving;
 	}
 	
-	public void setCar(Car temp) {
-		car = temp;
+	public void setCar(Car temp) { 
+		this.car = temp;
 	}
 	
-	public void setCarLabel(JLabel temp) {
+	public void setCarLabel(JLabel temp) { 
 		this.carLabel = temp;
+	}
+	
+	public void setCars(Car[] temp) { //could be used for array
+		this.cars = temp;
+	}
+	
+	public void setCars1(Car[] temp) { //could be used for array
+		this.cars1 = temp;
+	}
+	
+	public void setCars2(Car[] temp) { //could be used for array
+		this.cars2 = temp;
+	}
+	
+	public void setCarLabels(JLabel[] temp) { // could be used for array 
+		this.carLabels = temp;
 	}
 	
 	
@@ -85,10 +104,24 @@ public class Log  extends Sprite implements Runnable{
 		
 	}
 	
+	public void startAgain() { // as the thread is stopped frog should move again to initial phase
+		frog.setX(GameProperties.x_left);
+		frog.setY(GameProperties.y_left);
+		frogLabel.setLocation(frog.getX(),frog.getY());
+		
+		
+	}
+	
 	public void stopThread() {
 		if(this.moving) {
 			this.moving = false;
-			car.setMoving(false);
+//			car.setMoving(false);
+			for(int i=0; i < cars.length;i++) {
+				cars[i].setMoving(false);
+				cars1[i].setMoving(false);
+				cars2[i].setMoving(false);
+				
+			}
 			
 		}
 	}
@@ -143,6 +176,7 @@ public class Log  extends Sprite implements Runnable{
 				
 			}else {
 				this.stopThread();
+				this.startAgain();
 			}
 		}
 		// } 

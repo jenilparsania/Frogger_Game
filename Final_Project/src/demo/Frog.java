@@ -13,6 +13,7 @@ public class Frog extends Sprite {
 		frogLabel = temp;
 	}
 	
+	
 	public Frog() {
 		super();
 		
@@ -20,8 +21,6 @@ public class Frog extends Sprite {
 	
 	public Frog(int x,int y,int height, int width,String image) {
 		super(x,y,height,width,image);
-		
-		
 		
 	}
 

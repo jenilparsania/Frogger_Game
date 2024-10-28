@@ -93,12 +93,20 @@ public class Car extends Sprite implements Runnable {
 		}
 		
 	}
+	public void startAgain() { // as the thread is stopped frog should move again to initial phase
+		frog.setX(GameProperties.x_left);
+		frog.setY(GameProperties.y_left);
+		frogLabel.setLocation(frog.getX(),frog.getY());
+		
+		
+	}
 	
 	public void stopThread() {
 		if(this.moving) {
 			this.moving = false;
 			log.setMoving(false);
 			startButton.setText("collided");
+			this.startAgain();
 		}
 	}
 	

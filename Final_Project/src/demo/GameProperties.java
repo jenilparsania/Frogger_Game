@@ -23,7 +23,8 @@ public class GameProperties {
 	 * */
 	
 	/*
-	 * error in the array of cars , if one car detech collison then it stops only one car
+	 * error in the array of cars , if one car detech collison then it stops only one car : solved it by using gamePrep 
+	 * now trying to remove that one  maual car  and also trying to include it in the car array 
 	 * 
 	 * 
 	 */

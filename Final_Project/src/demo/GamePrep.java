@@ -34,15 +34,27 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	// buttons
 	private JButton startButton;
 	private Car[] cars;  
+	private Car[] cars1;
+	private Car[] cars2;
 	
 	private JLabel[] carLabels;
+	private JLabel[] carLabels1;
+	private JLabel[] carLabels2;
+	
+	private Log[] logs;
+	private Log[] logs1;
+	private Log[] logs2;
+	
+	private JLabel[] logLabels;
+	
+	
 	
 	public GamePrep() {
 		super("Frogger");
 		//set up screen
 		// public Sprite(int x,int y, int height, int width,String image) 
 		frog = new Frog(GameProperties.x_left,GameProperties.y_left,39,40,"frog1-copy.png");
-		car = new Car(7,491,40,100,"car-3.png");
+//		car = new Car(7,491,40,100,"car-3.png");
 		log = new Log(7,239,40,110,"log-big.png");
 		
 		
@@ -90,7 +102,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		frogLabel.setSize(frog.getWidth(),frog.getHeight());
 		frogLabel.setLocation(frog.getX(),frog.getY());
 		frog.display();
-		
+		/*
 		car.setX(7);
 		car.setY(491 );
 		car.setWidth(100);
@@ -105,22 +117,40 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		
 		carLabel.setSize(car.getWidth(),car.getHeight());
 		carLabel.setLocation(car.getX(),car.getY());
-		car.display();
+//		car.display();
 		
 		// carLabel has a memory label
 		car.setCarLabel(carLabel);
 		car.setFrogLabel(frogLabel);
 		car.setLogLabel(logLabel);
 		
+		*/
+		
 		// the car array code is in here 
-		carLabels = new JLabel[3];
-		cars = new Car[3];
+		carLabels = new JLabel[4];
+		carLabels1 = new JLabel[4];
+		carLabels2 = new JLabel[4];
+		cars = new Car[4];
+		cars1= new Car[4];
+		cars2 = new Car[4];
 		
 		
 		cars[0] = new Car(175,491,40,100,"car-3.png");
 		cars[1] = new Car(385,491,40,100,"car-3.png");
 		cars[2] = new Car(615,491,40,100,"car-3.png");
-		car.setGamePrep(this);	
+		cars[3] = new Car(7,491,40,100,"car-3.png");
+		
+		cars1[0] = new Car(7,407,40,100,"car-3.png");
+		cars1[1] = new Car(175,407,40,100,"car-3.png");
+		cars1[2] = new Car(385,407,40,100,"car-3.png");
+		cars1[3] = new Car(615,407,40,100,"car-3.png");
+		
+		cars2[0] = new Car(7,323,40,100,"car-3.png");
+		cars2[1] = new Car(175,323,40,100,"car-3.png");
+		cars2[2] = new Car(385,323,40,100,"car-3.png");
+		cars2[3] = new Car(615,323,40,100,"car-3.png");
+		
+		
 		
 				 
 				 
@@ -145,8 +175,54 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	         add(carLabels[i]);
 	         cars[i].setGamePrep(this);	
 	         
-			
-			
+	         
+	         
+	         // for the car1 array 
+	         cars1[i].setFrog(frog);
+			 cars1[i].setLog(log);
+			 cars1[i].setStartButton(startButton);
+				
+			 carLabels1[i] = new JLabel();
+			 carLabels1[i].setIcon(new ImageIcon(getClass().getResource("images/" + cars1[i].getImage())));
+		     carLabels1[i].setSize(cars1[i].getWidth(), cars1[i].getHeight());
+		     carLabels1[i].setLocation(cars1[i].getX(), cars1[i].getY());
+		     cars1[i].display();
+
+		            // Connect car to its JLabel
+		     cars1[i].setCarLabel(carLabels1[i]);
+		        //cars[i].setCarLabel(carLabel);
+		 	 cars1[i].setFrogLabel(frogLabel);
+		 	 cars1[i].setLogLabel(logLabel);
+		 		 // have t 
+		         
+		     add(carLabels1[i]);
+		     cars1[i].setGamePrep(this);	
+		         
+		         
+		         
+		         //for the car2 array
+		      cars2[i].setFrog(frog);
+			  cars2[i].setLog(log);
+			  cars2[i].setStartButton(startButton);
+					
+			  carLabels2[i] = new JLabel();
+			  carLabels2[i].setIcon(new ImageIcon(getClass().getResource("images/" + cars2[i].getImage())));
+		      carLabels2[i].setSize(cars2[i].getWidth(), cars2[i].getHeight());
+		      carLabels2[i].setLocation(cars2[i].getX(), cars2[i].getY());
+		      cars2[i].display();
+
+			            // Connect car to its JLabel
+		      cars2[i].setCarLabel(carLabels2[i]);
+			         //cars[i].setCarLabel(carLabel);
+		 	  cars2[i].setFrogLabel(frogLabel);
+		 	  cars2[i].setLogLabel(logLabel);
+			 		 // have t 
+			         
+		      add(carLabels2[i]);
+		     cars2[i].setGamePrep(this);	
+	        
+	         
+	    	
 		}
 
 		
@@ -158,6 +234,15 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		log.setImage("log-big.png");
 		log.setFrog(frog);
 		log.setCar(car);
+//		for(Car car:cars) {
+//			log.setCar(car);
+//		}
+		// instead of the loop would have to pass the whole array 
+		// inside the new methods which would accept the Car array 
+		
+		log.setCars(cars);
+		log.setCars1(cars1);
+		log.setCars2(cars2);
 		
 		
 		logLabel = new JLabel();
@@ -170,8 +255,15 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		log.setLogLabel(logLabel);
 		log.setFrogLabel(frogLabel);
 		log.setCarLabel(carLabel);
+//		for(JLabel label:carLabels) {
+//			log.setCarLabel(label);
+//		}
 		
-		car.setStartButton(startButton);
+		log.setCarLabels(carLabels);
+		log.setCarLabels(carLabels1);
+		
+		
+//		car.setStartButton(startButton);
 		
 		
 		
@@ -180,7 +272,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		content.addKeyListener(this);
 		add(startButton);
 		add(frogLabel);
-		add(carLabel);
+//		add(carLabel);
 		add(logLabel);
 		add(backgroundImageLabel);
 		content.setFocusable(true);
@@ -269,31 +361,52 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			
 			System.out.println("Start button pressed");
 			
-			if(car.getMoving()) { // just to check
+			if(cars[0].getMoving()) { // just to check
 				
-				car.stopThread();
+				cars[0].stopThread();
+				
 				log.stopThread();
 			}else {
-				for(Car car:cars) {
-					if(car.getMoving()) {
-						car.stopThread();
+				// for(int i=0;i<cars.length;i++) 
+				for(int z = 0;z < cars.length;z++) {
+					if(cars[z].getMoving()) {
+						cars[z].stopThread();
+						cars1[z].stopThread();
+						cars2[z].stopThread();
+						log.stopThread();
 						
-						log.stopThread();
 					}else {
-						car.startThread();
-						log.stopThread();
+						cars[z].startThread();
+						cars1[z].startThread();
+						cars2[z].startThread();
+						log.startThread();
 					}
 				}
-				car.startThread();
-				log.startThread();
+				
+//				for(Car car:cars) {
+//					if(car.getMoving()) {
+//						car.stopThread();
+//						
+//						log.stopThread();
+//					}else {
+//						car.startThread();
+//						log.startThread();
+//					}
+//				}
+//				cars[0].startThread();
+//				log.startThread();
 			}
 		}
 		
 	}
 	
 	public void stopAllCars() {
-		for(Car car : cars) {
-			car.stopThread();
+		
+		for(int i=0; i < cars.length;i++) {
+			cars[i].stopThread();
+			cars1[i].stopThread();
+			cars2[i].stopThread();
+			
 		}
 	}
 	

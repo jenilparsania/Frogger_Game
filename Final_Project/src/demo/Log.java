@@ -29,6 +29,8 @@ public class Log  extends Sprite implements Runnable{
 		frog = temp;
 	}
 	
+	
+	
 	public void setFrogLabel(JLabel temp) {
 		frogLabel = temp;
 	}
@@ -44,6 +46,7 @@ public class Log  extends Sprite implements Runnable{
 	public void setMoving(Boolean moving) {
 		this.moving = moving;
 	}
+	
 	
 	public void setCar(Car temp) { 
 		this.car = temp;
@@ -79,6 +82,11 @@ public class Log  extends Sprite implements Runnable{
 		super(x,y,height,width,image);
 		this.moving = false;
 		
+		
+	}
+	private GamePrep gamePrep;
+	public void setGamePrep(GamePrep gamePrep) {
+		this.gamePrep = gamePrep;
 	}
 	
 	
@@ -160,35 +168,43 @@ public class Log  extends Sprite implements Runnable{
 	
 	
 	private void detechCollision() {
-		
+//		Log[] logs = gamePrep.getLogs();
+//		Log[] logs1 = gamePrep.getLogs1();
+//		
+//		
 		if(frog.getY() <= GameProperties.y_safe) {
+//			boolean collided = false;
+//			
+//			for(int i=0; i<logs.length;i++) {
+//				if(logs[i].getRectangle().intersects(frog.getRectangle()) || logs1[i].getRectangle().intersects(frog.getRectangle()) ) {
+//					collided = true;
+//					int frogx= frog.getX();
+//					frogx += GameProperties.CHARACTER_STEP;
+//					frog.setX(frogx);
+//					frogLabel.setLocation(frog.getX(),frog.getY());
+//				}
+			
 			if(this.r.intersects(frog.getRectangle())) {
-				//while(this.r.intersects(frog.getRectangle())) {
-				//was using a while loop but then realized that detechCollision
-				// was itself in a while loop 
-					int frogx= frog.getX();
-					frogx += GameProperties.CHARACTER_STEP;
-					frog.setX(frogx);
-					frogLabel.setLocation(frog.getX(),frog.getY());
-					
-					
-					
+				int frogx = frog.getX();
+				frogx += GameProperties.CHARACTER_STEP;
+				frog.setX(frogx);
+				frogLabel.setLocation(frog.getX(),frog.getY());
 				
-			}else {
-				this.stopThread();
-				this.startAgain();
+//				
+			}
+//			
+//			if(!collided) {
+//				
+//					this.stopThread();
+//					gamePrep.stopAllCars();
+//					gamePrep.stopAllLogs();
+//					this.startAgain();
+//				
+//			}
+//			
+//					
 			}
 		}
-		// } 
-		
-	
+			
 	}
 
-		
-	
-	
-	
-	
-	
-
-}

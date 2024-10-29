@@ -16,6 +16,10 @@ public class Car extends Sprite implements Runnable {
 	private Log log;
 	private JLabel frogLabel;
 	private JLabel logLabel;
+	private Log logs[];
+	private Log logs1[];
+	private Log logs2[];
+	
 	
 	private JButton startButton;
 	
@@ -44,6 +48,17 @@ public class Car extends Sprite implements Runnable {
 		this.carLabel = temp;
 	}
 	
+	public void setLogs(Log[] temp) {
+		this.logs = temp;
+	}
+	
+	public void setLogs1(Log[] temp) {
+		this.logs1 = temp;
+	}
+	
+	public void setLogs2(Log[] temp) {
+		this.logs2 = temp;
+	}
 	public Boolean getMoving() {
 		return moving;
 	}
@@ -146,6 +161,7 @@ public class Car extends Sprite implements Runnable {
 			System.out.println("BOOM!");
 			this.stopThread();
 			gamePrep.stopAllCars();
+			gamePrep.stopAllLogs();
 			
 		}
 	}

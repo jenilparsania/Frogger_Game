@@ -20,11 +20,13 @@ public class GameProperties {
 	/*
 	 * safe zone : y=281
 	 * one step after safe-zone:  y = 239 
+	 * 
+	 * 
 	 * */
 	
 	/*
-	 * error in the array of cars , if one car detech collison then it stops only one car : solved it by using gamePrep 
-	 * now trying to remove that one  maual car  and also trying to include it in the car array 
+	 *
+	 * error , frog is not starting again after it reaches the finishing line (only error left)
 	 * 
 	 * 
 	 */

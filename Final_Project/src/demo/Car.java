@@ -162,6 +162,7 @@ public class Car extends Sprite implements Runnable {
 			this.stopThread();
 			gamePrep.stopAllCars();
 			gamePrep.stopAllLogs();
+			gamePrep.gameEndsLose();
 			
 		}
 	}

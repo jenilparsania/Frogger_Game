@@ -6,11 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	//declare copies of our character
@@ -29,10 +34,12 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	private ImageIcon carImage;
 	private JLabel logLabel;
 	private ImageIcon logImage;
+	private JLabel score;
 	
 	
 	// buttons
 	private JButton startButton;
+	private JButton saveButton;
 	private Car[] cars;  
 	private Car[] cars1;
 	private Car[] cars2;
@@ -66,6 +73,8 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		frog = new Frog(GameProperties.x_left,GameProperties.y_left,39,40,"frog1-copy.png");
 //		car = new Car(7,491,40,100,"car-3.png");
 		log = new Log(7,71,40,110,"log-big.png");
+//		this.setupDatabase();
+
 		
 		
 		
@@ -83,6 +92,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		//
 		
 		backgroundImageLabel = new JLabel();
+		
 		backgroundImage = new ImageIcon(getClass().getResource("images/"+GameProperties.BG_IMAGE));
 		backgroundImageLabel.setIcon(backgroundImage); // this is important step
 		// it basically connects front-end and back-end 
@@ -96,6 +106,23 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 				GameProperties.SCREEN_HEIGHT - 100);
 		startButton.setFocusable(false);
 		startButton.addActionListener(this);
+		
+		saveButton = new JButton("Save");
+		saveButton.setSize(75,50);
+		saveButton.setLocation(
+				GameProperties.SCREEN_WIDTH - 200, 
+				GameProperties.SCREEN_HEIGHT - 100);
+		saveButton.setFocusable(false);
+		saveButton.addActionListener(this);
+		
+		
+		score = new JLabel("0");
+		score.setText("0");
+		score.setSize(100,75);
+		score.setLocation(
+				GameProperties.SCREEN_WIDTH - 300, 
+				GameProperties.SCREEN_HEIGHT - 100);
+		add(score);
 
 		
 		// frog setup
@@ -186,6 +213,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	         add(carLabels[i]);
 	         cars[i].setLogs(logs);
 		 	 cars[i].setLogs1(logs1);
+		 	 cars[i].setLogs2(logs2);
 	         cars[i].setGamePrep(this);	
 	         
 	         
@@ -208,6 +236,8 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		 	 cars1[i].setLogLabel(logLabel);
 		 	 cars1[i].setLogs(logs);
 		 	 cars1[i].setLogs1(logs1);
+		 	 cars2[i].setLogs2(logs2);
+		 	 
 		 		 // have t 
 		         
 		     add(carLabels1[i]);
@@ -233,6 +263,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		 	  cars2[i].setLogLabel(logLabel);
 		 	  cars2[i].setLogs(logs);
 		 	  cars2[i].setLogs1(logs1);
+		 	  cars2[i].setLogs2(logs2);
 			 		 // have t 
 			         
 		      add(carLabels2[i]);
@@ -253,24 +284,21 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 
 		
 		// log = new Log(7,160,120,250,"log-delete.png");
-		logs[0] = new Log(7,113,120,250,"log-big.png");
-		logs[1] = new Log(217,113,120,250,"log-big.png");
-		logs[2] = new Log(427,113,120,250,"log-big.png");
-		logs[3] = new Log(637,113,120,250,"log-big.png");
+		logs[0] = new Log(7,113,110,120,"log-big.png");
+		logs[1] = new Log(217,113,110,120,"log-big.png");
+		logs[2] = new Log(427,113,110,120,"log-big.png");
+		logs[3] = new Log(637,113,110,120,"log-big.png");
 		
-		logs2[0] = new Log(7,29,120,250,"log-big.png");
-		logs2[1] = new Log(217,29,120,250,"log-big.png");
-		logs2[2] = new Log(427,29,120,250,"log-big.png");
-		logs2[3] = new Log(637,29,120,250,"log-big.png");
+		logs2[0] = new Log(7,29,110,120,"log-big.png");
+		logs2[1] = new Log(217,29,110,120,"log-big.png");
+		logs2[2] = new Log(427,29,110,120,"log-big.png");
+		logs2[3] = new Log(637,29,110,120,"log-big.png");
 		
-		logs1[0] = new Log(7,197,120,250,"log-big.png");
-		logs1[1] = new Log(217,197,120,250,"log-big.png");
-		logs1[2] = new Log(427,197,120,250,"log-big.png");
-		logs1[3] = new Log(637,197,120,250,"log-big.png");
-		
-		
-		
-		
+		logs1[0] = new Log(7,197,110,120,"log-big.png");
+		logs1[1] = new Log(217,197,110,120,"log-big.png");
+		logs1[2] = new Log(427,197,110,120,"log-big.png");
+		logs1[3] = new Log(637,197,110,120,"log-big.png");
+	
 		log.setX(7);
 		log.setY(71 );
 		log.setWidth(110);
@@ -295,7 +323,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		
 		logLabel.setSize(log.getWidth(),log.getHeight());
 		logLabel.setLocation(log.getX(),log.getY());
-		log.display();		
+//		log.display();		
 		log.setLogLabel(logLabel);
 		log.setFrogLabel(frogLabel);
 		log.setCarLabel(carLabel);
@@ -344,6 +372,27 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			logs1[i].setFrogLabel(frogLabel);
 			add(logLabels1[i]);
 			
+			
+			//for logs2 array
+			
+			logs2[i].setFrog(frog);
+			logs2[i].setCars(cars);
+			logs2[i].setCars1(cars1);
+			logs2[i].setCars2(cars2);
+			logLabels2[i] = new JLabel();
+			
+			logs2[i].setGamePrep(this);
+			logLabels2[i].setIcon(new ImageIcon(getClass().getResource("images/"+logs2[i].getImage())));
+			
+			logLabels2[i].setSize(logs2[i].getWidth(),logs2[i].getHeight());
+			logLabels2[i].setLocation(logs2[i].getX(),logs2[i].getY());
+			logs2[i].setLogLabel(logLabels2[i]);
+			logs2[i].display();
+			logs2[i].setFrogLabel(frogLabel);
+			add(logLabels2[i]);
+			
+			
+			
 		}
 		
 		
@@ -352,9 +401,10 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		// would have to declare the characters from up
 		content.addKeyListener(this);
 		add(startButton);
+		add(saveButton);
 		
 //		add(carLabel);
-		add(logLabel);
+//		add(logLabel);
 		add(backgroundImageLabel);
 		content.setFocusable(true);
 		
@@ -392,6 +442,17 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			}
 			
 			
+			if(y<=29) { //if frog comes to the finishing 
+				log.stopThread();
+				this.stopAllCars();
+				
+				log.startAgain();
+				this.stopAllLogs();
+				frog.setX(GameProperties.x_left);  // why these things are not working 
+				frog.setY(GameProperties.y_left);
+				frogLabel.setLocation(frog.getX(),frog.getY());
+				this.gameEndsWin();
+			}
 			
 			if(y<=GameProperties.y_top) {
 				y= GameProperties.y_top;
@@ -443,7 +504,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			boolean collided = false;
 			
 			for(int i=0; i<logs.length;i++) {
-				if(logs1[i].getRectangle().intersects(frog.getRectangle()) || logs[i].getRectangle().intersects(frog.getRectangle()) ) {
+				if(logs1[i].getRectangle().intersects(frog.getRectangle()) || logs[i].getRectangle().intersects(frog.getRectangle()) || logs2[i].getRectangle().intersects(frog.getRectangle()) ) {
 					collided = true;
 //					int frogx= frog.getX();
 //					frogx += GameProperties.CHARACTER_STEP;
@@ -459,6 +520,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 				this.stopAllCars();
 				this.stopAllLogs();
 				log.startAgain();
+				gameEndsLose();
 			
 		}
 			
@@ -494,6 +556,8 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 						log.stopThread();
 						logs[z].stopThread();
 						logs1[z].stopThread();
+						logs2[z].stopThread();
+						gameEndsLose(); 
 						
 					}else {
 						cars[z].startThread();
@@ -502,6 +566,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 						log.startThread();
 						logs[z].startThread();
 						logs1[z].startThread();
+						logs2[z].startThread();
 					}
 				}
 				
@@ -520,6 +585,11 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			}
 		}
 		
+		if(e.getSource() == saveButton) {
+			System.out.println("save button triggered");
+			this.setupDatabase();
+		}
+		
 	}
 	
 	public void stopAllCars() {
@@ -528,6 +598,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			cars[i].stopThread();
 			cars1[i].stopThread();
 			cars2[i].stopThread();
+//			gameEndsLose();
 			
 		}
 	}
@@ -537,7 +608,95 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		for(int i=0; i<logs.length;i++) {
 			logs[i].stopThread();
 			logs1[i].stopThread();
+			logs2[i].stopThread();
 		}
+	}
+	
+	public void gameEndsWin() {
+		int newMarks = Integer.parseInt( score.getText())+50;
+		score.setText(Integer.toString(newMarks));
+		frog.setX(GameProperties.x_left);
+		frog.setY(GameProperties.y_left);
+		frogLabel.setLocation(frog.getX(),frog.getY());
+//		this.setupDatabase();
+		
+	}
+	
+	public void gameEndsLose() {  // why only working on the logs , figure that out 
+		int newMarks = Integer.parseInt( score.getText())-50;
+		score.setText(Integer.toString(newMarks));
+//		this.setupDatabase();
+	}
+	
+	
+	// method to execute the database connection 
+	public  void setupDatabase() {
+		
+		Connection conn = null;
+		
+		try {
+			
+			// load the database driver
+			Class.forName("org.sqlite.JDBC");
+			System.out.println("Driver Loaded");
+			
+			//create a connection string and connect to database
+			String dbURL = "jdbc:sqlite:frogger.db";
+			conn = DriverManager.getConnection(dbURL);
+			
+			//if succesfull
+			if(conn != null) {
+				System.out.println("connected to database");
+				
+				// Showing the meta-data for database
+				DatabaseMetaData db = (DatabaseMetaData) conn.getMetaData();
+				System.out.println("Driver Name: "+ db.getDriverName());
+				System.out.println("Driver Version: "+ db.getDriverVersion());
+				System.out.println("Product Name: "+ db.getDatabaseProductName());
+				System.out.println("Product Version: "+ db.getDatabaseProductVersion());
+				
+				// create a table using prepared - statement 
+				String sqlCreateTable = "CREATE TABLE IF NOT EXISTS GAME" 
+						+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT, "+ "NAME TEXT NOT NULL," + "SCORE  INT NOT NULL) ";
+				
+				try (PreparedStatement pstmtCreateTable = conn.prepareStatement(sqlCreateTable)) {
+					pstmtCreateTable.executeUpdate();
+					System.out.println("Table Successfully Created");
+				}
+				
+				String sqlInsert = "INSERT INTO GAME (NAME , SCORE) VALUES (? , ? )";
+				try(PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert)){
+					
+					String playerName;
+					
+					playerName = JOptionPane.showInputDialog(null,"what is your name ? ");
+					
+					
+					
+					//execute calls to prepared statement 
+					pstmtInsert.setString(1,playerName);
+					pstmtInsert.setInt(2,Integer.parseInt(score.getText()));
+					pstmtInsert.executeUpdate();
+					
+					System.out.println("Record Inserted");
+					
+					
+					
+				}
+				
+				
+			}
+		
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}
+		
+	
+		
+		
+		
 	}
 	
 	

@@ -2,6 +2,7 @@ package demo;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -40,6 +41,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	// buttons
 	private JButton startButton;
 	private JButton saveButton;
+	private JButton stopButton;
 	private Car[] cars;  
 	private Car[] cars1;
 	private Car[] cars2;
@@ -97,7 +99,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		backgroundImageLabel.setIcon(backgroundImage); // this is important step
 		// it basically connects front-end and back-end 
 		
-		backgroundImageLabel.setSize(800,600);
+		backgroundImageLabel.setSize(780,600);
 		backgroundImageLabel.setLocation(0,0);
 		startButton = new JButton("Start");
 		startButton.setSize(75, 50);
@@ -115,13 +117,25 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		saveButton.setFocusable(false);
 		saveButton.addActionListener(this);
 		
+		stopButton = new JButton("Stop");
+		stopButton.setSize(75,50);
+		stopButton.setLocation(
+				GameProperties.SCREEN_WIDTH - 300,
+				GameProperties.SCREEN_HEIGHT-100
+				);
+		stopButton.setFocusable(false);
+		stopButton.addActionListener(this);
+		
+		
+		add(stopButton);
 		
 		score = new JLabel("0");
 		score.setText("0");
 		score.setSize(100,75);
+		score.setFont(new Font("Arial",Font.BOLD,20));
 		score.setLocation(
-				GameProperties.SCREEN_WIDTH - 300, 
-				GameProperties.SCREEN_HEIGHT - 100);
+				GameProperties.SCREEN_WIDTH - 400, 
+				GameProperties.SCREEN_HEIGHT - 110);
 		add(score);
 
 		
@@ -140,29 +154,9 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		frogLabel.setLocation(frog.getX(),frog.getY());
 		frog.display();
 		add(frogLabel);
-		/*
-		car.setX(7);
-		car.setY(491 );
-		car.setWidth(100);
-		car.setHeight(40);
-		car.setImage("car-3.png");
-		car.setFrog(frog ); // I was missing this part
-		car.setLog(log);
 		
-		carLabel = new JLabel();
-		carImage = new ImageIcon(getClass().getResource("images/"+car.getImage()));
-		carLabel.setIcon(carImage);
 		
-		carLabel.setSize(car.getWidth(),car.getHeight());
-		carLabel.setLocation(car.getX(),car.getY());
-//		car.display();
 		
-		// carLabel has a memory label
-		car.setCarLabel(carLabel);
-		car.setFrogLabel(frogLabel);
-		car.setLogLabel(logLabel);
-		
-		*/
 		
 		// the car array code is in here 
 		carLabels = new JLabel[4];
@@ -188,9 +182,6 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		cars2[2] = new Car(385,323,40,100,"car-3.png");
 		cars2[3] = new Car(615,323,40,100,"car-3.png");
 		
-		
-		
-				 
 				 
 		for(int i=0;i<cars.length;i++) {
 			cars[i].setFrog(frog);
@@ -284,10 +275,12 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 
 		
 		// log = new Log(7,160,120,250,"log-delete.png");
+		// logs is the middle row 
 		logs[0] = new Log(7,113,110,120,"log-big.png");
 		logs[1] = new Log(217,113,110,120,"log-big.png");
 		logs[2] = new Log(427,113,110,120,"log-big.png");
 		logs[3] = new Log(637,113,110,120,"log-big.png");
+		
 		
 		logs2[0] = new Log(7,29,110,120,"log-big.png");
 		logs2[1] = new Log(217,29,110,120,"log-big.png");
@@ -323,19 +316,17 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		
 		logLabel.setSize(log.getWidth(),log.getHeight());
 		logLabel.setLocation(log.getX(),log.getY());
-//		log.display();		
+
 		log.setLogLabel(logLabel);
 		log.setFrogLabel(frogLabel);
 		log.setCarLabel(carLabel);
-//		for(JLabel label:carLabels) {
-//			log.setCarLabel(label);
-//		}
+
 		
 		log.setCarLabels(carLabels);
 		log.setCarLabels(carLabels1);
 		
 		
-//		car.setStartButton(startButton);
+
 		
 		for(int i=0;i<logs.length;i++) {
 			logs[i].setFrog(frog);
@@ -351,6 +342,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			logLabels[i].setLocation(logs[i].getX(),logs[i].getY());
 			logs[i].setLogLabel(logLabels[i]);
 			logs[i].display();
+			logs[i].setDirection(false);
 			logs[i].setFrogLabel(frogLabel);
 			add(logLabels[i]);
 			
@@ -369,6 +361,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			logLabels1[i].setLocation(logs1[i].getX(),logs1[i].getY());
 			logs1[i].setLogLabel(logLabels1[i]);
 			logs1[i].display();
+			logs1[i].setDirection(true);
 			logs1[i].setFrogLabel(frogLabel);
 			add(logLabels1[i]);
 			
@@ -388,6 +381,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			logLabels2[i].setLocation(logs2[i].getX(),logs2[i].getY());
 			logs2[i].setLogLabel(logLabels2[i]);
 			logs2[i].display();
+			logs2[i].setDirection(true);
 			logs2[i].setFrogLabel(frogLabel);
 			add(logLabels2[i]);
 			
@@ -442,17 +436,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			}
 			
 			
-			if(y<=29) { //if frog comes to the finishing 
-				log.stopThread();
-				this.stopAllCars();
-				
-				log.startAgain();
-				this.stopAllLogs();
-				frog.setX(GameProperties.x_left);  // why these things are not working 
-				frog.setY(GameProperties.y_left);
-				frogLabel.setLocation(frog.getX(),frog.getY());
-				this.gameEndsWin();
-			}
+
 			
 			if(y<=GameProperties.y_top) {
 				y= GameProperties.y_top;
@@ -493,6 +477,18 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 		frog.setX(x);
 		frog.setY(y);
 		
+		if(y<=29) { //if frog comes to the finishing 
+			log.stopThread();
+			this.stopAllCars();
+			
+			log.startAgain();
+			this.stopAllLogs();
+			frog.setX(GameProperties.x_left); 
+			frog.setY(GameProperties.y_left);
+			frogLabel.setLocation(frog.getX(),frog.getY());
+			this.gameEndsWin();
+		}
+		
 		// moving the label as per back-end 
 		frogLabel.setLocation(frog.getX(),frog.getY());
 		
@@ -506,10 +502,7 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 			for(int i=0; i<logs.length;i++) {
 				if(logs1[i].getRectangle().intersects(frog.getRectangle()) || logs[i].getRectangle().intersects(frog.getRectangle()) || logs2[i].getRectangle().intersects(frog.getRectangle()) ) {
 					collided = true;
-//					int frogx= frog.getX();
-//					frogx += GameProperties.CHARACTER_STEP;
-//					frog.setX(frogx);
-//					frogLabel.setLocation(frog.getX(),frog.getY());
+
 				}
 				
 				
@@ -570,24 +563,19 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 					}
 				}
 				
-//				for(Car car:cars) {
-//					if(car.getMoving()) {
-//						car.stopThread();
-//						
-//						log.stopThread();
-//					}else {
-//						car.startThread();
-//						log.startThread();
-//					}
-//				}
-//				cars[0].startThread();
-//				log.startThread();
+
 			}
 		}
 		
 		if(e.getSource() == saveButton) {
 			System.out.println("save button triggered");
 			this.setupDatabase();
+		}
+		
+		if(e.getSource() == stopButton) {
+			System.out.println("stop button triggered");
+			this.stopAllCars();
+			this.stopAllLogs();
 		}
 		
 	}
@@ -613,19 +601,32 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 	}
 	
 	public void gameEndsWin() {
-		int newMarks = Integer.parseInt( score.getText())+50;
-		score.setText(Integer.toString(newMarks));
+		System.out.println("gameEndsWin");
+		for(int i=0; i< logs.length; i++ ) {
+			logs[i].stopThread();
+		}
+		for(int i=0; i< cars.length; i++ ) {
+			cars[i].stopThread();
+		}
+		System.out.println("GameProperties.x_left: " + GameProperties.x_left);
+		System.out.println("GameProperties.y_left: " + GameProperties.y_left);
+		
 		frog.setX(GameProperties.x_left);
 		frog.setY(GameProperties.y_left);
 		frogLabel.setLocation(frog.getX(),frog.getY());
-//		this.setupDatabase();
+
+		frog.display();
+
+		int newMarks = Integer.parseInt( score.getText())+50;
+		score.setText(Integer.toString(newMarks));
+
 		
 	}
 	
-	public void gameEndsLose() {  // why only working on the logs , figure that out 
+	public void gameEndsLose() {  
 		int newMarks = Integer.parseInt( score.getText())-50;
 		score.setText(Integer.toString(newMarks));
-//		this.setupDatabase();
+
 	}
 	
 	
@@ -674,11 +675,19 @@ public class GamePrep  extends JFrame implements KeyListener, ActionListener{
 					
 					
 					//execute calls to prepared statement 
-					pstmtInsert.setString(1,playerName);
-					pstmtInsert.setInt(2,Integer.parseInt(score.getText()));
-					pstmtInsert.executeUpdate();
+					if(playerName == null) {
+						System.out.println("No record inserted, please restart the game  ");
+						
+						
+					}else {
+						pstmtInsert.setString(1,playerName);
+						pstmtInsert.setInt(2,Integer.parseInt(score.getText()));
+						pstmtInsert.executeUpdate();
+						System.out.println("Record Inserted");
+					}
 					
-					System.out.println("Record Inserted");
+					
+					
 					
 					
 					

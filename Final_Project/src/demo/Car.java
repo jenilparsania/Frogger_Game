@@ -120,7 +120,7 @@ public class Car extends Sprite implements Runnable {
 		if(this.moving) {
 			this.moving = false;
 			log.setMoving(false);
-			startButton.setText("collided");
+			startButton.setText("Start");
 			this.startAgain();
 		}
 	}

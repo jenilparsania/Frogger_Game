@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 
 public class Log  extends Sprite implements Runnable{
 	private Boolean moving;
+	private Boolean direction;
 	private Thread t;
 	private Boolean hasPassedCars;
 	private JButton startButton;
@@ -72,6 +73,14 @@ public class Log  extends Sprite implements Runnable{
 		this.carLabels = temp;
 	}
 	
+	public Boolean getDirection() {
+		return this.direction;
+	}
+	
+	public void setDirection(boolean temp) { 
+		this.direction = temp;
+	}
+	
 	
 	public Log() {
 		super();
@@ -134,25 +143,50 @@ public class Log  extends Sprite implements Runnable{
 		}
 	}
 
-	@Override
+	
 	public void run() {
-		// TODO Auto-generated method stub
+		
 		System.out.println("run triggered");
+		/**/
 		while(this.moving) {
 			int x = this.x;
-			x += GameProperties.CHARACTER_STEP;
 			
-			if(x>= GameProperties.SCREEN_WIDTH) {
-				x = -1 * this.width;
+			if(!this.getDirection()) {
+				//going other way 
+				x -= GameProperties.CHARACTER_STEP;
+				
+				if(x<= -1*this.width) {
+					x =GameProperties.SCREEN_WIDTH;
+				}
+				
+				this.setX(x);
+				System.out.println("log x: \"+this.r.x+\",  log y : \"+ this.r.y+ \" , log w : \"+this.r.width+ \" ,log h : \" +this.r.height");
+				
+				logLabel.setLocation(this.x,this.y);
+				
+				this.detechCollision();
+				
+			}else { 
+				// regular movement 
+				
+				x += GameProperties.CHARACTER_STEP;
+				
+				if(x>= GameProperties.SCREEN_WIDTH) {
+					x = -1 * this.width;
+					
+					
+				}
+				
+				this.setX(x);
+				System.out.println("log x: "+this.r.x+",  log y : "+ this.r.y+ " , log w : "+this.r.width+ " ,log h : " +this.r.height);
+				
+				logLabel.setLocation(this.x,this.y);
+				
+				this.detechCollision();
+				System.out.println("x,y: "+ this.x + " " + this.y);
 			}
 			
-			this.setX(x);
-			System.out.println("log x: "+this.r.x+",  log y : "+ this.r.y+ " , log w : "+this.r.width+ " ,log h : " +this.r.height);
-			
-			logLabel.setLocation(this.x,this.y);
-			
-			this.detechCollision();
-			System.out.println("x,y: "+ this.x + " " + this.y);
+
 			
 			try {
 				Thread.sleep(200);
@@ -168,27 +202,43 @@ public class Log  extends Sprite implements Runnable{
 	
 	
 	private void detechCollision() {
-//		Log[] logs = gamePrep.getLogs();
-//		Log[] logs1 = gamePrep.getLogs1();
-//		
-//		
+	
 		if(frog.getY() <= GameProperties.y_safe) {
-//			boolean collided = false;
-//			
-//			for(int i=0; i<logs.length;i++) {
-//				if(logs[i].getRectangle().intersects(frog.getRectangle()) || logs1[i].getRectangle().intersects(frog.getRectangle()) ) {
-//					collided = true;
-//					int frogx= frog.getX();
-//					frogx += GameProperties.CHARACTER_STEP;
-//					frog.setX(frogx);
-//					frogLabel.setLocation(frog.getX(),frog.getY());
-//				}
+
 			
 			if(this.r.intersects(frog.getRectangle())) {
+				
+				
 				int frogx = frog.getX();
-				frogx += GameProperties.CHARACTER_STEP;
-				frog.setX(frogx);
-				frogLabel.setLocation(frog.getX(),frog.getY());
+				
+				if(!this.direction) {
+					frogx -= GameProperties.CHARACTER_STEP;
+					frog.setX(frogx);
+					frogLabel.setLocation(frog.getX(),frog.getY());
+				}else {
+					frogx += GameProperties.CHARACTER_STEP;
+					frog.setX(frogx);
+					frogLabel.setLocation(frog.getX(),frog.getY());
+				}
+				
+				if(frogx <= 0) {
+					gamePrep.stopAllCars();
+					gamePrep.stopAllLogs();
+					this.startAgain();
+					gamePrep.gameEndsLose();
+					
+				}else if(frogx >= GameProperties.x_right) {
+					gamePrep.stopAllCars();
+					gamePrep.stopAllLogs();
+					gamePrep.gameEndsLose();
+					this.startAgain();
+				}
+				
+//				frog.setX(frogx);
+//				frogLabel.setLocation(frog.getX(),frog.getY());
+				
+				
+				
 				
 //				
 			}

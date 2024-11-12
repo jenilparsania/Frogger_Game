@@ -2,7 +2,7 @@ package demo;
 
 public class GameProperties {
 	public static final int SCREEN_HEIGHT = 700;
-	public static final int SCREEN_WIDTH = 825;
+	public static final int SCREEN_WIDTH = 810;
 	public static final int CHARACTER_STEP = 42;
 	public static final String BG_IMAGE = "bg_800x500.png";
 	public static final int x_left = 7;
@@ -26,8 +26,8 @@ public class GameProperties {
 	
 	/*
 	 *
-	 * error , frog is not starting again after it reaches the finishing line (only error left)
-	 * 
+	 * Add a stop button , to stop the game
+	 * change the font size of the score 
 	 * 
 	 */
 }
